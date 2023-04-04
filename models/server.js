@@ -1,5 +1,7 @@
-const express = require('express');
-const cors = require('cors');
+const express = require('express'); // Paquete/Dependencia/Framework para generar un sitio Web (API para este proyecto)
+const cors = require('cors'); // Middleware para habilitar CORS
+
+const { dbConnection } = require('../database/config'); // Obtener modulo de conexión a MongoDB
 
 class Server {
 
@@ -11,12 +13,19 @@ class Server {
         // Routes Path
         this.usersRoutePath = '/api/users';
 
+        // Conexión DB
+        this.connectarDB();
+
         // Middlewares
         this.middlewares();
 
         // Rutas de la aplicación
         this.routes();
 
+    }
+
+    async connectarDB() {
+        await dbConnection();
     }
 
     middlewares() {
@@ -34,6 +43,7 @@ class Server {
 
     routes() {
         
+        // API Users
         this.app.use(this.usersRoutePath, require('../routes/users'));
 
     }
