@@ -1,8 +1,13 @@
 const { Router } = require('express'); // Función o metodo para generar las rutas de la aplicación
 const { check } = require('express-validator'); // Metodo "check" para validar parametros de payload
-const { validarCampos } = require('../middlewares/validar-campos'); //Middleware personalizado para revisar si existen errores al validar los campos
+
+// Exportaciones Middlewares
+const { validarCampos, validarJWT, validarAdminRole, tieneRole } = require('../middlewares'); // Llamada a index con los require necesarios para procesar las validaciones de middleware
+
+// Exportaciones Helpers
 const { esRolValido, emailExiste, existeUserById } = require('../helpers/db-validators'); // Helper para validar si el rol ingresado es válido
 
+// Exportaciones Controllers
 const { usersGet, usersPut, usersPost, usersDelete, usersPatch } = require('../controllers/users'); // Todas las funciones/metodos/APIs que realizaran procesamiento de los datos
 
 const router = Router();
@@ -27,6 +32,9 @@ router.put('/:id', [
 ], usersPut);
 
 router.delete('/:id', [
+    validarJWT,
+    //validarAdminRole, // Valida que sea solo ADMIN_ROLE
+    tieneRole('ADMIN_ROLE','VENTAS_ROLE'),
     check('id', 'No es un ID válido').isMongoId(),
     check('id').custom(existeUserById),
     validarCampos
