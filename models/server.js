@@ -1,5 +1,6 @@
 const express = require('express'); // Paquete/Dependencia/Framework para generar un sitio Web (API para este proyecto)
 const cors = require('cors'); // Middleware para habilitar CORS
+const fileUpload = require('express-fileupload'); //Middleware para permitir carga de archivos
 
 const { dbConnection } = require('../database/config'); // Obtener modulo de conexión a MongoDB
 
@@ -15,6 +16,7 @@ class Server {
             auth:       '/api/auth',
             buscar:     '/api/buscar',
             categories: '/api/categories',
+            uploads:    '/api/uploads',
             users:      '/api/users',
             productos:  '/api/productos'
         }
@@ -45,6 +47,14 @@ class Server {
         // Directorio Publico
         this.app.use(express.static('public'));
 
+        //FileUpload - Carga de Archivos
+        this.app.use(fileUpload({
+            useTempFiles : true,
+            tempFileDir : '/tmp/',
+            createParentPath: true
+        }));
+
+
     }
 
     routes() {
@@ -60,6 +70,9 @@ class Server {
 
         // API Productos
         this.app.use(this.paths.productos, require('../routes/productos'));
+
+        // API Uploads
+        this.app.use(this.paths.uploads, require('../routes/uploads'));
 
         // API Users
         this.app.use(this.paths.users, require('../routes/users'));
