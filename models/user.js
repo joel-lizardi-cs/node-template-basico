@@ -40,4 +40,4 @@ UserShema.methods.toJSON = function() {
     return user;
 }
 
-module.exports = model('Users', UserShema);
+module.exports = model('User', UserShema);

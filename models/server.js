@@ -11,8 +11,13 @@ class Server {
         this.port = process.env.PORT || 3000;
 
         // Routes Path
-        this.usersRoutePath = '/api/users';
-        this.authPath       = '/api/auth';
+        this.paths = {
+            auth:       '/api/auth',
+            buscar:     '/api/buscar',
+            categories: '/api/categories',
+            users:      '/api/users',
+            productos:  '/api/productos'
+        }
 
         // Conexión DB
         this.connectarDB();
@@ -45,10 +50,19 @@ class Server {
     routes() {
         
         // API AUTH
-        this.app.use(this.authPath, require('../routes/auth'));
+        this.app.use(this.paths.auth, require('../routes/auth'));
+
+        // API Buscar
+        this.app.use(this.paths.buscar, require('../routes/buscar'));
+
+        // API Categories
+        this.app.use(this.paths.categories, require('../routes/categories'));
+
+        // API Productos
+        this.app.use(this.paths.productos, require('../routes/productos'));
 
         // API Users
-        this.app.use(this.usersRoutePath, require('../routes/users'));
+        this.app.use(this.paths.users, require('../routes/users'));
 
     }
 

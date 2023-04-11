@@ -1,5 +1,9 @@
-const Role = require('../models/role'); // Modelo o esquema de los roles
-const User = require('../models/user'); // Instancia de Modelo Users
+const {
+    Category,   // Modelo/Instancia/Esquema de Categorias
+    Role,       // Modelo/Instancia/Esquema de Roles
+    User,       // Modelo/Instancia/Esquema de Usuarios
+    Producto    // Modelo/Instancia/Esquema de Productos
+} = require('../models');
 
 const esRolValido = async(rol = '') => {
 
@@ -23,8 +27,24 @@ const existeUserById = async(id = '') => {
 
 }
 
+const existeCategoriaById = async(id = '') => {
+
+    const existeCategoria = await Category.findById(id);
+    if(!existeCategoria) throw new Error(`El id ${id}, no existe`);
+
+}
+
+const existeProductoById = async(id = '') => {
+
+    const existeProducto = await Producto.findById(id);
+    if(!existeProducto) throw new Error(`El id ${id}, no existe`);
+
+}
+
 module.exports = {
     esRolValido,
     emailExiste,
-    existeUserById
+    existeUserById,
+    existeCategoriaById,
+    existeProductoById
 }
